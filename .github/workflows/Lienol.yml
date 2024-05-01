@@ -12,8 +12,8 @@ on:
     inputs:
       ssh:
         description: 'ssh'
-        required: false
-        default: 'false'
+        required: true
+        default: 'true'
 
 env:
   UPLOAD_BIN_DIR: false
@@ -79,6 +79,10 @@ jobs:
       run: |
         ./scripts/feeds update -a
         
+    - name: SSH connection to Actions
+      uses: P3TERX/debugger-action@master
+      if: env.SSH_ACTIONS == 'true' || contains(github.event.action, 'ssh')
+   
     - name: Defconfig ${{matrix.target}}
       env:
         CONFIG_FILE: '${{matrix.target}}.config'
